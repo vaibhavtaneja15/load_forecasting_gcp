@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+  
+  <div class="hero">
+    <h1>About the Project</h1>
+    <p class="hero-subtitle">Python-Based ANN for Electrical Load Forecasting with GCP Integration</p>
+  </div>
+
+  <!-- Project Overview -->
+  <div class="card">
+    <h2>Project Information</h2>
+    <div class="content-section">
+      <p>
+        This project titled <strong>"Implementation and Deployment of ANN-Based Electrical Load Forecasting System"</strong> 
+        represents a complete evolution from research to production-ready deployment. The system utilizes a 
+        Python-based Artificial Neural Network (ANN) built with PyTorch for predicting hourly electrical load 
+        with high precision.
+      </p>
+      <p>
+        The forecasting model leverages historical load data combined with meteorological and temporal features 
+        such as temperature, humidity, month, day, and previous load values. The entire system is deployed on 
+        Google Cloud Platform (GCP), utilizing modern cloud services for scalability, reliability, and 
+        intelligent data management.
+      </p>
+    </div>
+  </div>
+
+  <!-- Team Members -->
+  <div class="card">
+    <h2>Team Power Rangers</h2>
+    <div class="content-section">
+      <ul>
+        <li><strong>Vaibhav Taneja</strong> - Roll No: 23295918020</li>
+        <li><strong>Shreya Dixit</strong> - Roll No: 23295918015</li>
+        <li><strong>Ruhaan Mohan</strong> - Roll No: 23293916051</li>
+        <li><strong>Lavanya Arora</strong> - Roll No: 23295918011</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Three Phases -->
+  <div class="card">
+    <h2>Project Development Phases</h2>
+    <div class="content-section">
+      <h3>Stage 1: Model Development & Training (MATLAB)</h3>
+      <ul>
+        <li>Dataset collection: 6999 hourly samples over 10 months</li>
+        <li>Data preprocessing using moving mean smoothing and normalization</li>
+        <li>Initial ANN architecture design with 10 input features and 90 hidden neurons</li>
+        <li>Training using Levenberg-Marquardt (LM), Bayesian Regularization (BR), and Scaled Conjugate Gradient (SCG)</li>
+        <li>Model evaluation achieving MSE of 0.0013 and R² of 0.985 with LM algorithm</li>
+      </ul>
+
+      <h3>Stage 2: Hybrid Deployment (MATLAB + Python)</h3>
+      <ul>
+        <li>Python Flask backend development for API endpoints</li>
+        <li>MATLAB Engine API integration for real-time inference</li>
+        <li>Frontend dashboard creation for user interaction</li>
+        <li>Identification of deployment limitations due to MATLAB licensing dependency</li>
+      </ul>
+
+      <h3>Stage 3: Full Python & Cloud Deployment (Current)</h3>
+      <ul>
+        <li>Complete ANN reimplementation in Python using PyTorch framework</li>
+        <li>Enhanced feature engineering with 11 input features including previous load dependency</li>
+        <li>Elimination of MATLAB dependency for fully open-source deployment</li>
+        <li>Docker containerization for consistent cross-platform deployment</li>
+        <li>Google Cloud Run deployment for serverless, auto-scaling infrastructure</li>
+        <li>Integration with GCP services: Vertex AI, BigQuery, Cloud Storage, Cloud Build, Cloud Logging</li>
+        <li>Production-ready system with cloud-native architecture</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Key Achievements -->
+  <div class="card">
+    <h2>Key Achievements</h2>
+    <div class="content-section">
+      <ul>
+        <li>Successfully migrated from MATLAB to pure Python PyTorch implementation</li>
+        <li>Maintained research-grade prediction accuracy (MSE < 0.002, R² > 0.98)</li>
+        <li>Achieved complete platform independence with no proprietary software dependencies</li>
+        <li>Deployed containerized application on Google Cloud Run for global accessibility</li>
+        <li>Integrated GCP services for intelligent model training, data warehousing, and monitoring</li>
+        <li>Created scalable architecture supporting future AI/ML enhancements</li>
+        <li>Developed user-friendly dashboard with real-time prediction visualization</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Technical Details -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-number">11</span>
+      <span class="stat-label">Input Features</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">90</span>
+      <span class="stat-label">Hidden Neurons</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">PyTorch</span>
+      <span class="stat-label">Deep Learning Framework</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">GCP</span>
+      <span class="stat-label">Cloud Platform</span>
+    </div>
+  </div>
+
+  <!-- GCP Integration -->
+  <div class="card">
+    <h2>Google Cloud Platform Integration</h2>
+    <div class="content-section">
+      <h3>Vertex AI - Model Training & Management</h3>
+      <p>
+        Vertex AI provides cloud-based infrastructure for training, evaluating, and versioning ANN models. 
+        This enables large-scale experimentation, automated retraining pipelines, and structured model 
+        lifecycle management without local compute limitations.
+      </p>
+
+      <h3>BigQuery - Time Series Data Warehouse</h3>
+      <p>
+        BigQuery serves as a centralized data warehouse for storing historical load data, weather parameters, 
+        and prediction results. It enables efficient analysis, SQL-based querying, and data-driven model 
+        improvements through large-scale analytics.
+      </p>
+
+      <h3>Cloud Storage - Model & Dataset Repository</h3>
+      <p>
+        Cloud Storage provides scalable and secure storage for trained PyTorch models, Excel datasets, 
+        and checkpoint files. It allows seamless access across Cloud Run and Vertex AI services.
+      </p>
+
+      <h3>Cloud Run - Serverless Deployment</h3>
+      <p>
+        Cloud Run hosts the containerized Flask application, providing automatic scaling, high availability, 
+        and pay-per-use pricing. The system handles variable traffic without manual infrastructure management.
+      </p>
+
+      <h3>Cloud Build - CI/CD Pipeline</h3>
+      <p>
+        Cloud Build automates Docker image creation and deployment, enabling continuous integration and 
+        faster, error-free updates to the application with version control integration.
+      </p>
+
+      <h3>Cloud Logging - Monitoring & Debugging</h3>
+      <p>
+        Cloud Logging provides centralized monitoring, debugging, and performance tracking. It captures 
+        prediction requests, errors, and system metrics to improve reliability in production.
+      </p>
+    </div>
+  </div>
+
+  <!-- Architecture Diagram -->
+  <div class="card">
+    <h2>System Architecture</h2>
+    <div class="content-section">
+      <p style="text-align: center; font-family: 'Courier New', monospace; background: rgba(0, 217, 255, 0.05); padding: 2rem; border-radius: 12px; line-height: 2;">
+        <strong>User Request</strong><br>
+        ↓<br>
+        <strong>Web UI (Flask + HTML/CSS/JS)</strong><br>
+        ↓<br>
+        <strong>Feature Engineering & Normalization</strong><br>
+        ↓<br>
+        <strong>ANN Prediction (PyTorch Model)</strong><br>
+        ↓<br>
+        <strong>Docker Container</strong><br>
+        ↓<br>
+        <strong>Google Cloud Run</strong><br>
+        ↓<br>
+        <strong>Vertex AI | BigQuery | Cloud Storage</strong>
+      </p>
+    </div>
+  </div>
+
+  <!-- Future Enhancements -->
+  <div class="card">
+    <h2>Future Enhancements</h2>
+    <div class="content-section">
+      <ul>
+        <li>Automated model retraining pipelines using Vertex AI AutoML</li>
+        <li>Real-time weather API integration for automatic data input</li>
+        <li>Multi-step ahead forecasting (24-72 hours) with uncertainty quantification</li>
+        <li>Historical prediction dashboard with BigQuery analytics integration</li>
+        <li>LSTM and Transformer architectures for improved temporal modeling</li>
+        <li>Ensemble methods combining multiple model architectures</li>
+        <li>Mobile application with offline prediction capabilities</li>
+        <li>Alert system for abnormal load predictions and grid anomalies</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

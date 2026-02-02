@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+  
+  <!-- Hero Section -->
+  <div class="hero">
+    <h1>Electrical Load Forecasting</h1>
+    <p class="hero-subtitle">Python ANN with Google Cloud Platform Integration</p>
+  </div>
+
+  <!-- Prediction Form -->
+  <div class="card">
+    <h2>Generate Load Forecast</h2>
+    
+    <div class="form-grid">
+      <input type="date" id="date" required>
+      <input type="number" id="temperature" placeholder="Temperature (°C)" min="0" max="50" step="0.1" required>
+      <input type="number" id="humidity" placeholder="Humidity (%)" min="0" max="100" step="0.1" required>
+      
+      <select id="daytype" required>
+        <option value="">Day Type</option>
+        <option value="weekday">Weekday</option>
+        <option value="weekend">Weekend</option>
+      </select>
+      
+      <select id="season" required>
+        <option value="">Season</option>
+        <option value="summer">Summer</option>
+        <option value="monsoon">Monsoon</option>
+        <option value="winter">Winter</option>
+      </select>
+    </div>
+    
+    <button class="btn" onclick="predict()">⚡ Predict Load</button>
+
+    <!-- Result Display -->
+    <div class="result-container">
+      <p class="result-label">Predicted Electrical Load</p>
+      <div id="result">-- MW</div>
+    </div>
+
+    <!-- Chart Section -->
+    <div class="chart-container">
+      <div class="chart-header">
+        <h3>Load Trend Analysis</h3>
+      </div>
+      <canvas id="loadChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Model Performance Stats -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-number">< 0.002</span>
+      <span class="stat-label">MSE (PyTorch)</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">> 0.98</span>
+      <span class="stat-label">R² Score</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">90</span>
+      <span class="stat-label">Hidden Neurons</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">6999</span>
+      <span class="stat-label">Training Samples</span>
+    </div>
+  </div>
+
+  <!-- Project Info Section -->
+  <div class="card">
+    <h2>Project Overview</h2>
+    <div class="content-section">
+      <p>
+        This load forecasting system implements an Artificial Neural Network (ANN) built with 
+        <strong>PyTorch</strong> framework using 90 hidden neurons and 11 carefully engineered 
+        input features. The model was developed as part of a B.Tech project at the Department 
+        of Electrical Engineering, University of Delhi.
+      </p>
+      <p>
+        <strong>Stage 3 Achievement:</strong> Complete transition from MATLAB to pure Python 
+        implementation, deployed on <strong>Google Cloud Platform</strong> using Cloud Run for 
+        serverless hosting, Vertex AI for model training, BigQuery for data warehousing, and 
+        Cloud Storage for model persistence. This architecture enables scalable, production-grade 
+        deployment with no proprietary software dependencies.
+      </p>
+    </div>
+  </div>
+
+  <!-- Technology Stack -->
+  <div class="card">
+    <h2>Technology Stack</h2>
+    <div class="content-section">
+      <h3>Machine Learning & Backend</h3>
+      <ul>
+        <li><strong>PyTorch:</strong> Deep learning framework for ANN implementation</li>
+        <li><strong>Flask:</strong> Web framework for RESTful API endpoints</li>
+        <li><strong>NumPy & Pandas:</strong> Data preprocessing and numerical computation</li>
+        <li><strong>Scikit-learn:</strong> Model evaluation metrics (MSE, R²)</li>
+      </ul>
+
+      <h3>Cloud Infrastructure (GCP)</h3>
+      <ul>
+        <li><strong>Cloud Run:</strong> Serverless container deployment with auto-scaling</li>
+        <li><strong>Vertex AI:</strong> Model training, versioning, and hyperparameter tuning</li>
+        <li><strong>BigQuery:</strong> Time series data warehousing and analytics</li>
+        <li><strong>Cloud Storage:</strong> Model checkpoint and dataset repository</li>
+        <li><strong>Cloud Build:</strong> CI/CD pipeline automation</li>
+        <li><strong>Cloud Logging:</strong> Monitoring, debugging, and observability</li>
+      </ul>
+
+      <h3>Frontend & Visualization</h3>
+      <ul>
+        <li><strong>HTML/CSS/JavaScript:</strong> Responsive web interface</li>
+        <li><strong>Chart.js:</strong> Real-time load trend visualization</li>
+        <li><strong>Docker:</strong> Containerization for consistent deployment</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,394 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+  
+  <div class="hero">
+    <h1>Methodology</h1>
+    <p class="hero-subtitle">Technical Approach & Cloud-Native Implementation</p>
+  </div>
+
+  <!-- Abstract -->
+  <div class="card">
+    <h2>Research Abstract</h2>
+    <div class="content-section">
+      <p>
+        Accurate short-term electrical load forecasting plays a vital role in ensuring the 
+        reliability, efficiency, and sustainability of modern power systems. This project 
+        implements a Python-based Artificial Neural Network (ANN) using PyTorch for predicting 
+        hourly electrical load with high precision and production-grade deployment.
+      </p>
+      <p>
+        Historical load data, combined with meteorological and temporal features such as 
+        temperature, humidity, month, day, and previous load values, were utilized to train 
+        the model effectively. The system is deployed on Google Cloud Platform (GCP) utilizing 
+        Cloud Run for serverless hosting, Vertex AI for model training, BigQuery for data 
+        warehousing, and Cloud Storage for model persistence.
+      </p>
+    </div>
+  </div>
+
+  <!-- Evolution Story -->
+  <div class="card">
+    <h2>Evolution: From MATLAB to Python Cloud Deployment</h2>
+    <div class="content-section">
+      <h3>Stage 1: MATLAB Research Environment</h3>
+      <p>
+        Initial ANN development utilized MATLAB's Neural Network Toolbox, providing a strong 
+        environment for research and analysis. The Levenberg-Marquardt algorithm with 90 hidden 
+        neurons achieved excellent performance (MSE = 0.0013, R² = 0.985).
+      </p>
+
+      <h3>Stage 2: Hybrid MATLAB-Python Deployment</h3>
+      <p>
+        A Flask backend was integrated with MATLAB Engine API for real-time inference. While 
+        functional, this approach created deployment limitations due to MATLAB licensing 
+        requirements and restricted cloud scalability.
+      </p>
+
+      <h3>Stage 3: Pure Python & Cloud-Native Architecture</h3>
+      <p>
+        Complete reimplementation in Python using PyTorch eliminated proprietary dependencies. 
+        The model was containerized with Docker and deployed on Google Cloud Run, enabling 
+        serverless, auto-scaling infrastructure with GCP AI/ML service integration.
+      </p>
+    </div>
+  </div>
+
+  <!-- Data Preprocessing -->
+  <div class="card">
+    <h2>Data Preprocessing Pipeline</h2>
+    <div class="content-section">
+      <h3>Moving Mean Smoothing</h3>
+      <p>
+        Time series smoothing eliminates noise and highlights longer-term trends in load data. 
+        In Python, this is implemented using pandas rolling mean:
+      </p>
+      <p class="highlight">smoothed_data = df['load'].rolling(window=k, center=True).mean()</p>
+      <p>
+        Where <strong>k</strong> is the window size. This preprocessing step helps in:
+      </p>
+      <ul>
+        <li>Reducing measurement noise from real-world data collection</li>
+        <li>Highlighting general patterns in load consumption</li>
+        <li>Improving ANN training convergence and generalization</li>
+      </ul>
+
+      <h3>Feature Normalization</h3>
+      <p>
+        All input features are normalized to ensure effective training and prevent gradient 
+        issues. Min-max normalization maps each variable into a common range:
+      </p>
+      <p class="highlight">normalized = (value - min) / (max - min)</p>
+      <ul>
+        <li><strong>Load:</strong> Normalized to [0, 1] using observed min/max (1540-8565 MW)</li>
+        <li><strong>Temperature:</strong> Normalized to [0, 1] using range 5.3-46.2°C</li>
+        <li><strong>Humidity:</strong> Normalized to [0, 1] using range 5-100%</li>
+        <li><strong>Temporal Features:</strong> Day/31, Month/12, Hour/23</li>
+        <li><strong>Binary Indicators:</strong> Weekday/weekend, seasonal flags (0 or 1)</li>
+      </ul>
+      <p>
+        Consistent normalization across training and inference ensures prediction stability.
+      </p>
+    </div>
+  </div>
+
+  <!-- Neural Network Architecture -->
+  <div class="card">
+    <h2>PyTorch Neural Network Architecture</h2>
+    <div class="content-section">
+      <h3>Input Layer (11 Features)</h3>
+      <p>The ANN accepts 11 normalized input features:</p>
+      <ul>
+        <li><strong>Temporal Features:</strong> Day of month (normalized), Month of year (normalized), Hour of day (normalized)</li>
+        <li><strong>Meteorological Features:</strong> Temperature (5.3-46.2°C), Humidity (5-100%)</li>
+        <li><strong>Calendar Features:</strong> Weekend/Public Holiday (binary), Weekday (binary)</li>
+        <li><strong>Seasonal Features:</strong> Summer, Monsoon, Winter (one-hot encoded)</li>
+        <li><strong>Historical Dependency:</strong> Previous load value (normalized) - captures short-term autocorrelation</li>
+      </ul>
+
+      <h3>Hidden Layer (90 Neurons)</h3>
+      <p>
+        Two hidden layers with <strong>Hyperbolic Tangent (tanh)</strong> activation function 
+        provide excellent non-linear transformation:
+      </p>
+      <p class="highlight">tanh(x) = (e^x - e^(-x)) / (e^x + e^(-x))</p>
+      <p>
+        PyTorch implementation:
+      </p>
+      <pre style="background: rgba(0, 217, 255, 0.05); padding: 1rem; border-radius: 8px; overflow-x: auto;">
+class LoadForecastingANN(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.fc1 = nn.Linear(11, 90)
+        self.tanh1 = nn.Tanh()
+        self.fc2 = nn.Linear(90, 90)
+        self.tanh2 = nn.Tanh()
+        self.fc3 = nn.Linear(90, 1)
+    
+    def forward(self, x):
+        x = self.tanh1(self.fc1(x))
+        x = self.tanh2(self.fc2(x))
+        x = self.fc3(x)
+        return x
+      </pre>
+      <p>
+        The architecture uses 90 hidden neurons optimized through systematic experimentation, 
+        balancing model complexity with generalization capability.
+      </p>
+
+      <h3>Output Layer (1 Neuron)</h3>
+      <p>
+        A single output neuron with linear activation predicts normalized electrical load, 
+        which is then denormalized to megawatts (MW) using domain-specific scaling 
+        (1540-8565 MW operational range).
+      </p>
+    </div>
+  </div>
+
+  <!-- Training Strategy -->
+  <div class="card">
+    <h2>Training Strategy</h2>
+    <div class="content-section">
+      <h3>Optimizer: L-BFGS</h3>
+      <p>
+        Limited-memory Broyden–Fletcher–Goldfarb–Shanno (L-BFGS) algorithm provides fast 
+        convergence for small-to-medium neural networks. It approximates second-order 
+        information without computing full Hessian matrices.
+      </p>
+      <p class="highlight">optimizer = torch.optim.LBFGS(model.parameters(), lr=0.8)</p>
+
+      <h3>Loss Function: Smooth L1 Loss</h3>
+      <p>
+        Smooth L1 Loss (Huber Loss) combines advantages of L1 and L2 loss, being less 
+        sensitive to outliers than MSE while maintaining smoothness:
+      </p>
+      <p class="highlight">criterion = nn.SmoothL1Loss()</p>
+
+      <h3>Early Stopping & Model Checkpointing</h3>
+      <p>
+        Training monitors validation loss and implements early stopping with patience of 20 epochs 
+        to prevent overfitting. Best model weights are saved based on validation performance:
+      </p>
+      <ul>
+        <li>Maximum 200 training epochs</li>
+        <li>Early stopping when validation loss stops improving</li>
+        <li>Best model checkpoint saved as <code>best.pth</code></li>
+        <li>Train/Validation/Test split: 70%/15%/15%</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Performance Metrics -->
+  <div class="card">
+    <h2>Model Evaluation Metrics</h2>
+    <div class="content-section">
+      <h3>Mean Squared Error (MSE)</h3>
+      <p class="highlight">MSE = (1/n) Σ(y_actual - y_predicted)²</p>
+      <p>
+        Measures the average squared difference between actual and predicted load values. 
+        Lower MSE indicates better model performance. Our Python model achieves MSE < 0.002 
+        on test data (comparable to original MATLAB implementation).
+      </p>
+
+      <h3>Coefficient of Determination (R²)</h3>
+      <p class="highlight">R² = 1 - (SS_residual / SS_total)</p>
+      <p>
+        Indicates the proportion of variance in the dependent variable predictable from 
+        independent variables. R² = 1 indicates perfect prediction. Our model achieves 
+        R² > 0.98, indicating excellent fit and generalization.
+      </p>
+
+      <h3>Validation Strategy</h3>
+      <ul>
+        <li>Temporal train-test split preserves time series characteristics</li>
+        <li>No data leakage from future to past</li>
+        <li>Consistent normalization parameters across all sets</li>
+        <li>Previous load feature uses only past information (causal)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Deployment Architecture -->
+  <div class="card">
+    <h2>Cloud-Native Deployment Architecture</h2>
+    <div class="content-section">
+      <h3>Docker Containerization</h3>
+      <p>
+        The application is containerized using Docker for consistent cross-platform deployment:
+      </p>
+      <pre style="background: rgba(0, 217, 255, 0.05); padding: 1rem; border-radius: 8px; overflow-x: auto;">
+FROM python:3.9-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+CMD ["gunicorn", "-b", "0.0.0.0:8080", "app:app"]
+      </pre>
+
+      <h3>Google Cloud Run Deployment</h3>
+      <p>
+        Cloud Run provides serverless container hosting with automatic scaling:
+      </p>
+      <ul>
+        <li>Automatic HTTPS provisioning</li>
+        <li>Scale-to-zero cost optimization</li>
+        <li>Global load balancing and CDN integration</li>
+        <li>Per-request billing (pay only for actual usage)</li>
+        <li>Built-in logging and monitoring</li>
+      </ul>
+
+      <h3>Inference Workflow</h3>
+      <p style="font-family: 'Courier New', monospace; background: rgba(0, 217, 255, 0.05); padding: 1.5rem; border-radius: 12px; line-height: 2;">
+        <strong>1. User Input</strong> → Web UI Form<br>
+        <strong>2. API Request</strong> → Flask /predict endpoint<br>
+        <strong>3. Preprocessing</strong> → Feature normalization<br>
+        <strong>4. Model Inference</strong> → PyTorch forward pass<br>
+        <strong>5. Postprocessing</strong> → Denormalization to MW<br>
+        <strong>6. Response</strong> → JSON result + Chart update<br>
+        <strong>7. Logging</strong> → Cloud Logging capture
+      </p>
+    </div>
+  </div>
+
+  <!-- GCP Services Integration -->
+  <div class="card">
+    <h2>GCP Services Integration</h2>
+    <div class="content-section">
+      <h3>Vertex AI - Model Training & Versioning</h3>
+      <p>
+        Vertex AI provides managed infrastructure for training PyTorch models at scale:
+      </p>
+      <ul>
+        <li>Custom training jobs with GPU/TPU acceleration</li>
+        <li>Hyperparameter tuning with Vertex AI Vizier</li>
+        <li>Model registry and version control</li>
+        <li>Automated retraining pipelines</li>
+        <li>Experiment tracking and comparison</li>
+      </ul>
+
+      <h3>BigQuery - Time Series Analytics</h3>
+      <p>
+        BigQuery stores historical data and prediction logs for analytics:
+      </p>
+      <ul>
+        <li>SQL-based querying of large-scale time series data</li>
+        <li>Integration with Excel data exports</li>
+        <li>Real-time prediction logging</li>
+        <li>Performance monitoring dashboards</li>
+        <li>Data-driven model retraining decisions</li>
+      </ul>
+
+      <h3>Cloud Storage - Model & Data Repository</h3>
+      <p>
+        Cloud Storage provides durable object storage:
+      </p>
+      <ul>
+        <li>Trained model checkpoints (.pth files)</li>
+        <li>Historical datasets and Excel files</li>
+        <li>Versioned model artifacts</li>
+        <li>Backup and disaster recovery</li>
+        <li>Multi-region replication</li>
+      </ul>
+
+      <h3>Cloud Build - CI/CD Automation</h3>
+      <p>
+        Cloud Build automates deployment workflow:
+      </p>
+      <ul>
+        <li>Automated Docker image building</li>
+        <li>GitHub/GitLab integration</li>
+        <li>Multi-stage deployment pipelines</li>
+        <li>Automated testing before deployment</li>
+        <li>Rollback capabilities</li>
+      </ul>
+
+      <h3>Cloud Logging - Observability</h3>
+      <p>
+        Cloud Logging provides comprehensive monitoring:
+      </p>
+      <ul>
+        <li>Request/response logging</li>
+        <li>Error tracking and alerting</li>
+        <li>Performance metrics (latency, throughput)</li>
+        <li>Custom log-based metrics</li>
+        <li>Integration with Cloud Monitoring dashboards</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Feature Engineering Insights -->
+  <div class="card">
+    <h2>Feature Engineering Insights</h2>
+    <div class="content-section">
+      <p>
+        Feature selection was informed by domain expertise in power systems and temporal modeling:
+      </p>
+      <ul>
+        <li>
+          <strong>Previous Load Feature:</strong> Captures short-term autocorrelation and inertia 
+          in power consumption patterns. Essential for day-ahead forecasting accuracy.
+        </li>
+        <li>
+          <strong>Temperature Impact:</strong> Air conditioning load increases exponentially 
+          above 30°C, captured through normalization and non-linear activation functions.
+        </li>
+        <li>
+          <strong>Humidity Effects:</strong> High humidity reduces evaporative cooling efficiency, 
+          indirectly increasing HVAC loads in residential and commercial sectors.
+        </li>
+        <li>
+          <strong>Day Type Discrimination:</strong> Industrial and commercial loads drop 
+          significantly on weekends, requiring explicit binary encoding for accurate prediction.
+        </li>
+        <li>
+          <strong>Seasonal Patterns:</strong> One-hot encoding captures distinct load profiles 
+          across summer (cooling-dominated), monsoon (moderate), and winter (heating) seasons.
+        </li>
+        <li>
+          <strong>Temporal Cycles:</strong> Day and month capture billing cycles and long-term 
+          seasonal trends beyond simple seasonal flags.
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Dataset Information -->
+  <div class="card">
+    <h2>Dataset Characteristics</h2>
+    <div class="content-section">
+      <ul>
+        <li><strong>Total Samples:</strong> 6,999 hourly measurements</li>
+        <li><strong>Duration:</strong> 10 months of historical data</li>
+        <li><strong>Sampling Rate:</strong> 1 hour</li>
+        <li><strong>Features:</strong> 11 engineered features (temporal, meteorological, categorical, historical)</li>
+        <li><strong>Load Range:</strong> 1540-8565 MW (metropolitan distribution network)</li>
+        <li><strong>Train/Val/Test Split:</strong> 70% / 15% / 15% (temporal ordering preserved)</li>
+        <li><strong>Storage:</strong> Excel format → migrating to BigQuery for scalability</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Performance Comparison -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-number">< 0.002</span>
+      <span class="stat-label">Test MSE (Python)</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">> 0.98</span>
+      <span class="stat-label">R² Score</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">< 50ms</span>
+      <span class="stat-label">Inference Latency</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">100%</span>
+      <span class="stat-label">Open Source</span>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,14 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+flask
+gunicorn
+numpy<2
+scipy
+scikit-learn
+torch==2.1.0+cpu
+pandas
+openpyxl
+
+google-cloud-storage
+google-cloud-bigquery
+google-cloud-aiplatform

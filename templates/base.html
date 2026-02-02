@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electrical Load Forecasting System</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">Power Rangers<span class="ai-badge">ANN</span></span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="/" class="nav-link">Forecast</a></li>
+        <li><a href="/methodology" class="nav-link">Methodology</a></li>
+        <li><a href="/about" class="nav-link">About</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      
+      <div class="footer-grid">
+        
+        <div class="footer-section">
+          <div class="footer-logo">
+            <span class="logo-icon">⚡</span>
+            <span class="logo-text">Power Rangers<span class="ai-badge">ANN</span></span>
+          </div>
+          <p class="footer-description">
+            PyTorch-based Electrical Load Forecasting System with Google Cloud Platform integration, 
+            developed by Team Power Rangers at University of Delhi.
+          </p>
+        </div>
+
+        <div class="footer-section">
+          <h3 class="footer-heading">Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/methodology">Methodology</a></li>
+            <li><a href="/about">About</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h3 class="footer-heading">Team Members</h3>
+          <ul class="footer-contact">
+            <li>Vaibhav Taneja - 23295918020</li>
+            <li>Shreya Dixit - 23295918015</li>
+            <li>Ruhaan Mohan - 23293916051</li>
+            <li>Lavanya Arora - 23295918011</li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h3 class="footer-heading">Institution</h3>
+          <div class="footer-contact">
+            <p>Department of Electrical Engineering</p>
+            <p>Faculty of Technology</p>
+            <p>University of Delhi</p>
+            <p>New Delhi - 110007</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2025 Power Rangers Team. University of Delhi.</p>
+        <p class="footer-tech">PyTorch + Google Cloud Platform | Open Source Deployment</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
